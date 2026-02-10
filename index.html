@@ -66,7 +66,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   touch-action: manipulation;
-  transition: all 0.3s ease;
+  transition: left 0.4s ease; /* smooth horizontal movement */
 }
 
 #yesBtn {
@@ -135,21 +135,22 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const card = document.getElementById("card");
 const result = document.getElementById("result");
-const minMargin = 10;
+const minMargin = 10; 
 
-// Move "No" button anywhere inside the card
-function dodgeNoButton() {
+// Small side-to-side wiggle for No button
+function wiggleNoButton() {
   const cardRect = card.getBoundingClientRect();
   const btnRect = noBtn.getBoundingClientRect();
+  
+  const currentLeft = btnRect.left - cardRect.left;
 
-  const maxX = cardRect.width - btnRect.width - minMargin;
-  const maxY = cardRect.height - btnRect.height - minMargin;
+  // tiny horizontal move ±8px
+  let newLeft = currentLeft + (Math.random() > 0.5 ? 8 : -8);
 
-  let targetX = Math.random() * maxX;
-  let targetY = Math.random() * maxY;
+  // Clamp inside card
+  newLeft = Math.max(minMargin, Math.min(newLeft, cardRect.width - btnRect.width - minMargin));
 
-  noBtn.style.left = targetX + "px";
-  noBtn.style.top = targetY + "px";
+  noBtn.style.left = newLeft + "px";
 }
 
 // Shrink "No" and grow "Yes" temporarily
@@ -163,9 +164,10 @@ function shrinkNoGrowYes(){
 }
 
 // Event listeners
-noBtn.addEventListener("mouseenter", dodgeNoButton);
-noBtn.addEventListener("touchstart", dodgeNoButton);
-noBtn.addEventListener("click", shrinkNoGrowYes);
+noBtn.addEventListener("click", () => {
+  shrinkNoGrowYes();
+  wiggleNoButton();
+});
 
 yesBtn.addEventListener("click", () => {
   result.style.display = "block";
