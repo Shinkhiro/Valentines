@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be My Valentine 💖</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 24px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .image-holder {
+      width: 100%;
+      height: 240px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #eee;
+      margin-bottom: 20px;
+    }
+
+    .image-holder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    h2 {
+      margin: 0 0 24px;
+      color: #ff3b6f;
+      font-size: 22px;
+    }
+
+    .buttons {
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      position: absolute;
+      padding: 16px 26px;
+      border-radius: 14px;
+      border: none;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.2s ease;
+    }
+
+    #yesBtn {
+      background: #ff3b6f;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+    }
+
+    #noBtn {
+      background: #e5e5e5;
+      color: #333;
+      left: 20px;
+      top: 10px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      font-size: 22px;
+      color: #ff3b6f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <div class="image-holder">
+      <!-- CHANGE THIS IMAGE -->
+      <img src="your-image-here.jpg" alt="Valentine Image">
+    </div>
+
+    <h2>Will you be my Valentine? 💕</h2>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 🙃</button>
+    </div>
+
+    <div class="result" id="result">
+      Yay!! 💘🥰 I knew it!
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const card = document.getElementById("card");
+    const result = document.getElementById("result");
+
+    function moveNoButton() {
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width - 10;
+      const maxY = cardRect.height - btnRect.height - 10;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+    }
+
+    // Mobile tap + desktop hover
+    noBtn.addEventListener("touchstart", moveNoButton);
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    yesBtn.addEventListener("click", () => {
+      result.style.display = "block";
+      noBtn.style.display = "none";
+      yesBtn.style.transform = "scale(1.3)";
+    });
+  </script>
+
+</body>
+</html>
