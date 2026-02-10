@@ -1,228 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Be My Valentine 💖</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Be My Valentine 💖</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+* { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      overflow: hidden;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: hidden;
+}
 
-    .card {
-      background: #fff;
-      width: 100%;
-      max-width: 360px;
-      border-radius: 24px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-      position: relative;
-      overflow: hidden;
-    }
+.card {
+  background: #fff;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 24px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
 
-    .image-holder {
-      width: 100%;
-      height: 240px;
-      border-radius: 18px;
-      overflow: hidden;
-      background: #eee;
-      margin-bottom: 20px;
-    }
+.image-holder {
+  width: 100%;
+  height: 240px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #eee;
+  margin-bottom: 20px;
+}
 
-    .image-holder img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+.image-holder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    h2 {
-      margin: 0 0 24px;
-      color: #ff3b6f;
-      font-size: 22px;
-    }
+h2 {
+  margin: 0 0 24px;
+  color: #ff3b6f;
+  font-size: 22px;
+}
 
-    .buttons {
-      position: relative;
-      height: 180px;
-    }
+.buttons {
+  position: relative;
+  height: 180px;
+}
 
-    button {
-      position: absolute;
-      width: 60%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 16px 26px;
-      border-radius: 14px;
-      border: none;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      touch-action: manipulation;
-      transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease, width 0.2s ease, height 0.2s ease;
-    }
+button {
+  position: absolute;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 16px 26px;
+  border-radius: 14px;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.2s ease;
+}
 
-    #yesBtn {
-      background: #ff3b6f;
-      color: white;
-      top: 10px;
-    }
+#yesBtn {
+  background: #ff3b6f;
+  color: white;
+  top: 10px;
+}
 
-    #noBtn {
-      background: #e5e5e5;
-      color: #333;
-      top: 70px;
-    }
+#noBtn {
+  background: #e5e5e5;
+  color: #333;
+  top: 70px;
+  transition: top 0.3s ease, left 0.3s ease; /* smooth movement */
+}
 
-    .result {
-      display: none;
-      margin-top: 20px;
-      font-size: 22px;
-      color: #ff3b6f;
-    }
+.result {
+  display: none;
+  margin-top: 20px;
+  font-size: 22px;
+  color: #ff3b6f;
+}
 
-    .bounce {
-      animation: bounce 0.4s ease forwards;
-    }
+.bounce {
+  animation: bounce 0.4s ease forwards;
+}
 
-    @keyframes bounce {
-      0% { transform: translateX(-50%) scale(1); }
-      50% { transform: translateX(-50%) scale(1.3); }
-      100% { transform: translateX(-50%) scale(1); }
-    }
+@keyframes bounce {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.3); }
+  100% { transform: translateX(-50%) scale(1); }
+}
 
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.9;
-    }
-  </style>
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.9;
+}
+</style>
 </head>
 <body>
 
-  <div class="card" id="card">
-    <div class="image-holder">
-      <img src="your-image-here.jpg" alt="Valentine Image">
-    </div>
-
-    <h2>Will you be my Valentine? 💕</h2>
-
-    <div class="buttons">
-      <button id="yesBtn">Yes 💖</button>
-      <button id="noBtn">No 🙃</button>
-    </div>
-
-    <div class="result" id="result">
-      Yay!! 💘🥰 I knew it!
-    </div>
+<div class="card" id="card">
+  <div class="image-holder">
+    <img src="your-image-here.jpg" alt="Valentine Image">
   </div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const card = document.getElementById("card");
-    const result = document.getElementById("result");
+  <h2>Will you be my Valentine? 💕</h2>
 
-    const minMargin = 10;
+  <div class="buttons">
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 🙃</button>
+  </div>
 
-    // Move No button diagonally downward slowly
-    function moveNoButtonAway(event){
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-      const yesRect = yesBtn.getBoundingClientRect();
+  <div class="result" id="result">
+    Yay!! 💘🥰 I knew it!
+  </div>
+</div>
 
-      const mouseX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const card = document.getElementById("card");
+const result = document.getElementById("result");
 
-      let btnX = btnRect.left - cardRect.left;
-      let btnY = btnRect.top - cardRect.top;
+const minMargin = 10;
 
-      let dx = btnX + btnRect.width/2 - mouseX;
+// Smooth dodge function
+function moveNoButtonSlow(event){
+  const cardRect = card.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+  const yesRect = yesBtn.getBoundingClientRect();
 
-      // Smaller horizontal movement for slower dodge
-      let moveX = btnX + (dx > 0 ? Math.random()*5 : -Math.random()*20);
+  const mouseX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
 
-      // Clamp within card
-      moveX = Math.max(minMargin, Math.min(moveX, cardRect.width - btnRect.width - minMargin));
+  let btnX = btnRect.left - cardRect.left;
+  let btnY = btnRect.top - cardRect.top;
 
-      // Vertical movement (slow diagonal)
-      let moveY = btnY + 5 + Math.random()*5;
-      const maxY = cardRect.height - btnRect.height - minMargin;
-      moveY = Math.min(moveY, maxY);
+  let dx = btnX + btnRect.width/2 - mouseX;
 
-      // Avoid overlapping Yes button
-      const yesTop = yesRect.top - cardRect.top;
-      const yesBottom = yesTop + yesRect.height;
-      const overlapX = !(moveX + btnRect.width < yesRect.left - cardRect.left || moveX > yesRect.right - cardRect.left);
-      const overlapY = !(moveY + btnRect.height < yesTop || moveY > yesBottom);
-      if(overlapX && overlapY){
-        moveY = yesBottom + 5;
-        if(moveY > maxY){
-          moveY = maxY;
-        }
-      }
+  // Smaller movement for slower dodge
+  let targetX = btnX + (dx > 0 ? Math.random()*15 : -Math.random()*15);
+  let targetY = btnY + 3 + Math.random()*7; // slower diagonal
 
-      noBtn.style.left = moveX + "px";
-      noBtn.style.top = moveY + "px";
-    }
+  // Clamp inside card
+  targetX = Math.max(minMargin, Math.min(targetX, cardRect.width - btnRect.width - minMargin));
+  targetY = Math.max(minMargin + yesRect.bottom, Math.min(targetY, cardRect.height - btnRect.height - minMargin));
 
-    function shrinkNoGrowYes(){
-      noBtn.style.transform = "scale(0.7)";
-      yesBtn.style.transform = "translateX(-50%) scale(1.2)";
-      setTimeout(() => {
-        noBtn.style.transform = "scale(1)";
-        yesBtn.style.transform = "translateX(-50%) scale(1)";
-      }, 400);
-    }
+  // Avoid overlapping Yes button
+  const yesTop = yesRect.top - cardRect.top;
+  const yesBottom = yesRect.bottom - cardRect.top;
+  const overlapX = !(targetX + btnRect.width < yesRect.left - cardRect.left || targetX > yesRect.right - cardRect.left);
+  const overlapY = !(targetY + btnRect.height < yesTop || targetY > yesBottom);
+  if(overlapX && overlapY){
+    targetY = yesBottom + 5;
+  }
 
-    noBtn.addEventListener("mouseenter", moveNoButtonAway);
-    noBtn.addEventListener("touchstart", moveNoButtonAway);
-    noBtn.addEventListener("click", () => {
-      moveNoButtonAway(event);
-      shrinkNoGrowYes();
-    });
+  // Apply smooth movement
+  noBtn.style.left = targetX + "px";
+  noBtn.style.top = targetY + "px";
+}
 
-    yesBtn.addEventListener("click", () => {
-      result.style.display = "block";
-      noBtn.style.display = "none";
-      yesBtn.classList.add("bounce");
-      card.style.pointerEvents = "none";
-      createConfetti(160); // doubled confetti
-    });
+// Shrink No and grow Yes on click
+function shrinkNoGrowYes(){
+  noBtn.style.transform = "scale(0.7)";
+  yesBtn.style.transform = "translateX(-50%) scale(1.2)";
+  setTimeout(() => {
+    noBtn.style.transform = "scale(1)";
+    yesBtn.style.transform = "translateX(-50%) scale(1)";
+  }, 400);
+}
 
-    function createConfetti(amount){
-      for(let i=0;i<amount;i++){
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
-        confetti.style.left = Math.random()*window.innerWidth+'px';
-        confetti.style.top = '-10px';
-        const colors=['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
-        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-        const duration=2+Math.random()*2;
-        confetti.animate([
-          { transform: `translateY(0px) rotate(0deg)` },
-          { transform: `translateY(${window.innerHeight+50}px) rotate(${Math.random()*720}deg)` }
-        ], {duration: duration*1000, iterations:1, easing:'ease-out'});
-        setTimeout(()=> confetti.remove(), duration*1000);
-        document.body.appendChild(confetti);
-      }
-    }
-  </script>
+// Event listeners
+noBtn.addEventListener("mouseenter", moveNoButtonSlow);
+noBtn.addEventListener("touchstart", moveNoButtonSlow);
+noBtn.addEventListener("click", () => {
+  moveNoButtonSlow(event);
+  shrinkNoGrowYes();
+});
+
+yesBtn.addEventListener("click", () => {
+  result.style.display = "block";
+  noBtn.style.display = "none";
+  yesBtn.classList.add("bounce");
+  card.style.pointerEvents = "none";
+  createConfetti(160); // double confetti
+});
+
+// Confetti
+function createConfetti(amount){
+  for(let i=0;i<amount;i++){
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.left = Math.random()*window.innerWidth+'px';
+    confetti.style.top = '-10px';
+    const colors=['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
+    confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    const duration=2+Math.random()*2;
+    confetti.animate([
+      { transform: `translateY(0px) rotate(0deg)` },
+      { transform: `translateY(${window.innerHeight+50}px) rotate(${Math.random()*720}deg)` }
+    ], {duration: duration*1000, iterations:1, easing:'ease-out'});
+    setTimeout(()=> confetti.remove(), duration*1000);
+    document.body.appendChild(confetti);
+  }
+}
+</script>
 
 </body>
 </html>
-
