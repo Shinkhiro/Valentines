@@ -55,7 +55,7 @@
 
     .buttons {
       position: relative;
-      height: 180px; /* enough space for vertical and diagonal movement */
+      height: 180px;
     }
 
     button {
@@ -82,7 +82,7 @@
     #noBtn {
       background: #e5e5e5;
       color: #333;
-      top: 70px; /* initial position below Yes */
+      top: 70px;
     }
 
     .result {
@@ -140,7 +140,7 @@
 
     const minMargin = 10;
 
-    // Move No button diagonally downward when cursor/finger approaches
+    // Move No button diagonally downward slowly
     function moveNoButtonAway(event){
       const cardRect = card.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
@@ -153,12 +153,14 @@
 
       let dx = btnX + btnRect.width/2 - mouseX;
 
-      // Horizontal movement
-      let moveX = btnX + (dx > 0 ? Math.random()*60 : -Math.random()*60);
+      // Smaller horizontal movement for slower dodge
+      let moveX = btnX + (dx > 0 ? Math.random()*20 : -Math.random()*20);
+
+      // Clamp within card
       moveX = Math.max(minMargin, Math.min(moveX, cardRect.width - btnRect.width - minMargin));
 
-      // Vertical diagonal movement (downwards)
-      let moveY = btnY + 10 + Math.random()*20;
+      // Vertical movement (slow diagonal)
+      let moveY = btnY + 5 + Math.random()*10;
       const maxY = cardRect.height - btnRect.height - minMargin;
       moveY = Math.min(moveY, maxY);
 
@@ -178,11 +180,9 @@
       noBtn.style.top = moveY + "px";
     }
 
-    // Shrink No and grow Yes on click
     function shrinkNoGrowYes(){
       noBtn.style.transform = "scale(0.7)";
       yesBtn.style.transform = "translateX(-50%) scale(1.2)";
-
       setTimeout(() => {
         noBtn.style.transform = "scale(1)";
         yesBtn.style.transform = "translateX(-50%) scale(1)";
@@ -201,11 +201,9 @@
       noBtn.style.display = "none";
       yesBtn.classList.add("bounce");
       card.style.pointerEvents = "none";
-
       createConfetti(160); // doubled confetti
     });
 
-    // Confetti
     function createConfetti(amount){
       for(let i=0;i<amount;i++){
         const confetti = document.createElement('div');
