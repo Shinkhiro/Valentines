@@ -55,7 +55,7 @@
 
     .buttons {
       position: relative;
-      height: 120px;
+      height: 80px;
     }
 
     button {
@@ -67,22 +67,22 @@
       font-weight: 600;
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform 0.2s ease, left 0.2s ease, top 0.2s ease;
+      transition: transform 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease;
     }
 
     #yesBtn {
       background: #ff3b6f;
       color: white;
       left: 50%;
-      transform: translateX(-50%);
       bottom: 10px;
+      transform: translateX(-50%);
     }
 
     #noBtn {
       background: #e5e5e5;
       color: #333;
+      bottom: 10px;
       left: 20px;
-      top: 10px;
     }
 
     .result {
@@ -138,12 +138,13 @@
     const card = document.getElementById("card");
     const result = document.getElementById("result");
 
-    const minMargin = 10; // safe margin
+    const minMargin = 10;
 
     function getButtonRect(button) {
       return button.getBoundingClientRect();
     }
 
+    // Function to move No button away (horizontal only, same level)
     function moveNoButtonAway(event) {
       const cardRect = card.getBoundingClientRect();
       const btnRect = getButtonRect(noBtn);
@@ -151,41 +152,53 @@
 
       // Cursor/finger position
       const mouseX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
-      const mouseY = event.clientY || (event.touches && event.touches[0].clientY) || 0;
 
-      // Current No button position
+      // Current No button X
       let btnX = btnRect.left - cardRect.left;
-      let btnY = btnRect.top - cardRect.top;
 
       // Distance from cursor
       let dx = btnX + btnRect.width/2 - mouseX;
-      let dy = btnY + btnRect.height/2 - mouseY;
 
-      // Move opposite direction, with randomness
-      let moveX = btnX + (dx > 0 ? Math.random()*50 : -Math.random()*50);
-      let moveY = btnY + (dy > 0 ? Math.random()*50 : -Math.random()*50);
+      // Move opposite direction
+      let moveX = btnX + (dx > 0 ? Math.random()*60 : -Math.random()*60);
 
       // Clamp within card boundaries
       moveX = Math.max(minMargin, Math.min(moveX, cardRect.width - btnRect.width - minMargin));
-      moveY = Math.max(minMargin, Math.min(moveY, cardRect.height - btnRect.height - minMargin));
 
       // Avoid overlapping Yes button
       const overlapX = !(moveX + btnRect.width < yesRect.left - cardRect.left || moveX > yesRect.right - cardRect.left);
-      const overlapY = !(moveY + btnRect.height < yesRect.top - cardRect.top || moveY > yesRect.bottom - cardRect.top);
-      if(overlapX && overlapY){
-        moveY = moveY + btnRect.height + 10;
-        if(moveY > cardRect.height - btnRect.height - minMargin){
-          moveY = moveY - btnRect.height - 20;
+      if(overlapX){
+        if(moveX < cardRect.width/2){
+          moveX = Math.max(minMargin, yesRect.right - cardRect.left + 10);
+        } else {
+          moveX = Math.min(cardRect.width - btnRect.width - minMargin, yesRect.left - cardRect.left - btnRect.width - 10);
         }
       }
 
+      // Apply position
       noBtn.style.left = moveX + "px";
-      noBtn.style.top = moveY + "px";
+      noBtn.style.bottom = "10px";
     }
 
+    // Function for No click effect (shrink + Yes grows)
+    function shrinkNoGrowYes() {
+      noBtn.style.transform = "scale(0.7)";
+      yesBtn.style.transform = "translateX(-50%) scale(1.2)";
+
+      // Restore after short time
+      setTimeout(() => {
+        noBtn.style.transform = "scale(1)";
+        yesBtn.style.transform = "translateX(-50%) scale(1)";
+      }, 400);
+    }
+
+    // Event listeners
     noBtn.addEventListener("mouseenter", moveNoButtonAway);
     noBtn.addEventListener("touchstart", moveNoButtonAway);
-    noBtn.addEventListener("click", moveNoButtonAway);
+    noBtn.addEventListener("click", () => {
+      moveNoButtonAway(event);
+      shrinkNoGrowYes();
+    });
 
     yesBtn.addEventListener("click", () => {
       result.style.display = "block";
@@ -202,19 +215,17 @@
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
 
-        // Random start position
         confetti.style.left = Math.random() * window.innerWidth + 'px';
         confetti.style.top = '-10px';
 
         const colors = ['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
         confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
 
-        // Animate falling
         const duration = 2 + Math.random()*2;
         confetti.animate([
           { transform: `translateY(0px) rotate(0deg)` },
           { transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random()*720}deg)` }
-        ],{
+        ], {
           duration: duration*1000,
           iterations:1,
           easing: 'ease-out'
