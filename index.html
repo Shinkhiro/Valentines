@@ -55,11 +55,14 @@
 
     .buttons {
       position: relative;
-      height: 80px;
+      height: 150px; /* enough space for vertical buttons */
     }
 
     button {
       position: absolute;
+      width: 60%;
+      left: 50%;
+      transform: translateX(-50%);
       padding: 16px 26px;
       border-radius: 14px;
       border: none;
@@ -67,22 +70,19 @@
       font-weight: 600;
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform 0.2s ease, left 0.2s ease, width 0.2s ease, height 0.2s ease;
+      transition: transform 0.2s ease, top 0.2s ease, width 0.2s ease, height 0.2s ease;
     }
 
     #yesBtn {
       background: #ff3b6f;
       color: white;
-      left: 90%;
-      bottom: 10px;
-      transform: translateX(-50%);
+      top: 10px;
     }
 
     #noBtn {
       background: #e5e5e5;
       color: #333;
-      bottom: 10px;
-      left: 20px;
+      top: 70px; /* below Yes button */
     }
 
     .result {
@@ -128,7 +128,7 @@
     </div>
 
     <div class="result" id="result">
-      Yay!! 💘🥰 I Love you!
+      Yay!! 💘🥰 I knew it!
     </div>
   </div>
 
@@ -140,29 +140,20 @@
 
     const minMargin = 10;
 
-    function getButtonRect(button) {
-      return button.getBoundingClientRect();
-    }
-
-    // Function to move No button away (horizontal only, same level)
-    function moveNoButtonAway(event) {
+    // Move No button horizontally only
+    function moveNoButtonAway(event){
       const cardRect = card.getBoundingClientRect();
-      const btnRect = getButtonRect(noBtn);
-      const yesRect = getButtonRect(yesBtn);
+      const btnRect = noBtn.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
 
-      // Cursor/finger position
       const mouseX = event.clientX || (event.touches && event.touches[0].clientX) || 0;
 
-      // Current No button X
       let btnX = btnRect.left - cardRect.left;
-
-      // Distance from cursor
       let dx = btnX + btnRect.width/2 - mouseX;
 
-      // Move opposite direction
       let moveX = btnX + (dx > 0 ? Math.random()*60 : -Math.random()*60);
 
-      // Clamp within card boundaries
+      // Clamp inside card
       moveX = Math.max(minMargin, Math.min(moveX, cardRect.width - btnRect.width - minMargin));
 
       // Avoid overlapping Yes button
@@ -175,24 +166,20 @@
         }
       }
 
-      // Apply position
       noBtn.style.left = moveX + "px";
-      noBtn.style.bottom = "10px";
     }
 
-    // Function for No click effect (shrink + Yes grows)
-    function shrinkNoGrowYes() {
+    // Shrink No and grow Yes on click
+    function shrinkNoGrowYes(){
       noBtn.style.transform = "scale(0.7)";
       yesBtn.style.transform = "translateX(-50%) scale(1.2)";
 
-      // Restore after short time
       setTimeout(() => {
         noBtn.style.transform = "scale(1)";
         yesBtn.style.transform = "translateX(-50%) scale(1)";
       }, 400);
     }
 
-    // Event listeners
     noBtn.addEventListener("mouseenter", moveNoButtonAway);
     noBtn.addEventListener("touchstart", moveNoButtonAway);
     noBtn.addEventListener("click", () => {
@@ -205,32 +192,23 @@
       noBtn.style.display = "none";
       yesBtn.classList.add("bounce");
       card.style.pointerEvents = "none";
-
       createConfetti(80);
     });
 
     // Confetti
     function createConfetti(amount){
-      for(let i=0; i<amount; i++){
+      for(let i=0;i<amount;i++){
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
-
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.left = Math.random()*window.innerWidth+'px';
         confetti.style.top = '-10px';
-
-        const colors = ['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
+        const colors=['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
         confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-
-        const duration = 2 + Math.random()*2;
+        const duration=2+Math.random()*2;
         confetti.animate([
           { transform: `translateY(0px) rotate(0deg)` },
-          { transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random()*720}deg)` }
-        ], {
-          duration: duration*1000,
-          iterations:1,
-          easing: 'ease-out'
-        });
-
+          { transform: `translateY(${window.innerHeight+50}px) rotate(${Math.random()*720}deg)` }
+        ], {duration: duration*1000, iterations:1, easing:'ease-out'});
         setTimeout(()=> confetti.remove(), duration*1000);
         document.body.appendChild(confetti);
       }
@@ -239,6 +217,3 @@
 
 </body>
 </html>
-
-
-
