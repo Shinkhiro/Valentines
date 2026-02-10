@@ -154,13 +154,13 @@
       let dx = btnX + btnRect.width/2 - mouseX;
 
       // Smaller horizontal movement for slower dodge
-      let moveX = btnX + (dx > 0 ? Math.random()*20 : -Math.random()*20);
+      let moveX = btnX + (dx > 0 ? Math.random()*5 : -Math.random()*20);
 
       // Clamp within card
       moveX = Math.max(minMargin, Math.min(moveX, cardRect.width - btnRect.width - minMargin));
 
       // Vertical movement (slow diagonal)
-      let moveY = btnY + 5 + Math.random()*10;
+      let moveY = btnY + 5 + Math.random()*5;
       const maxY = cardRect.height - btnRect.height - minMargin;
       moveY = Math.min(moveY, maxY);
 
@@ -225,3 +225,4 @@
 
 </body>
 </html>
+
