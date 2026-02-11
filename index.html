@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Be My Valentine 💖</title>
+
 <style>
 * { box-sizing: border-box; }
 
@@ -16,8 +17,50 @@ body {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  overflow: hidden;
 }
 
+/* ===== BACKGROUND SCATTERED IMAGES ===== */
+.bg-images {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-img {
+  position: absolute;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(6px);
+  animation: float 9s ease-in-out infinite;
+}
+
+.bg-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.bg-medium {
+  width: 120px;
+  height: 160px;
+}
+
+.bg-large {
+  width: 170px;
+  height: 230px;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-18px); }
+  100% { transform: translateY(0); }
+}
+
+/* ===== CARD ===== */
 .card {
   background: #fff;
   width: 100%;
@@ -27,6 +70,7 @@ body {
   text-align: center;
   box-shadow: 0 15px 40px rgba(0,0,0,0.25);
   position: relative;
+  z-index: 5;
   overflow: hidden;
 }
 
@@ -65,8 +109,7 @@ button {
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  touch-action: manipulation;
-  transition: left 0.4s ease; /* smooth horizontal movement */
+  transition: left 1.2s ease-in-out;
 }
 
 #yesBtn {
@@ -111,11 +154,14 @@ button {
 }
 </style>
 </head>
+
 <body>
+
+<div class="bg-images" id="bgImages"></div>
 
 <div class="card" id="card">
   <div class="image-holder">
-    <img src="QWERT.jpg" alt="Valentine Image">
+    <img src="your-image-here.jpg" alt="Valentine Image">
   </div>
 
   <h2>Will you be my Valentine? 💕</h2>
@@ -126,7 +172,7 @@ button {
   </div>
 
   <div class="result" id="result">
-    Good! 💘🥰 I Love you!
+    Yay!! 💘🥰 I knew it!
   </div>
 </div>
 
@@ -135,26 +181,21 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const card = document.getElementById("card");
 const result = document.getElementById("result");
-const minMargin = 10; 
 
-// Small side-to-side wiggle for No button
+/* ===== NO BUTTON ===== */
 function wiggleNoButton() {
-  const cardRect = card.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
-  
-  const currentLeft = btnRect.left - cardRect.left;
+  const container = document.querySelector(".buttons");
+  const c = container.getBoundingClientRect();
+  const b = noBtn.getBoundingClientRect();
 
-  // tiny horizontal move ±8px
-  let newLeft = currentLeft + (Math.random() > 0.5 ? 8 : -8);
+  let left = b.left - c.left;
+  left += Math.random() > 0.5 ? 6 : -6;
 
-  // Clamp inside card
-  newLeft = Math.max(minMargin, Math.min(newLeft, cardRect.width - btnRect.width - minMargin));
-
-  noBtn.style.left = newLeft + "px";
+  left = Math.max(20, Math.min(left, c.width - b.width - 20));
+  noBtn.style.left = left + "px";
 }
 
-// Shrink "No" and grow "Yes" temporarily
-function shrinkNoGrowYes(){
+function shrinkNoGrowYes() {
   noBtn.style.transform = "scale(0.7)";
   yesBtn.style.transform = "scale(1.2)";
   setTimeout(() => {
@@ -163,7 +204,6 @@ function shrinkNoGrowYes(){
   }, 400);
 }
 
-// Event listeners
 noBtn.addEventListener("click", () => {
   shrinkNoGrowYes();
   wiggleNoButton();
@@ -177,26 +217,69 @@ yesBtn.addEventListener("click", () => {
   createConfetti(160);
 });
 
-// Confetti function
-function createConfetti(amount){
-  for(let i=0;i<amount;i++){
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti');
-    confetti.style.left = Math.random()*window.innerWidth+'px';
-    confetti.style.top = '-10px';
-    const colors=['#ff3b6f','#ff758c','#ffd6e0','#ff99c8','#ffb3c1'];
-    confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-    const duration=2+Math.random()*2;
-    confetti.animate([
-      { transform: `translateY(0px) rotate(0deg)` },
-      { transform: `translateY(${window.innerHeight+50}px) rotate(${Math.random()*720}deg)` }
-    ], {duration: duration*1000, iterations:1, easing:'ease-out'});
-    setTimeout(()=> confetti.remove(), duration*1000);
-    document.body.appendChild(confetti);
+/* ===== CONFETTI ===== */
+function createConfetti(amount) {
+  for (let i = 0; i < amount; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * window.innerWidth + "px";
+    c.style.top = "-10px";
+
+    const colors = ["#ff3b6f","#ff758c","#ffd6e0","#ff99c8","#ffb3c1"];
+    c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+    const d = 2 + Math.random() * 2;
+    c.animate([
+      { transform: "translateY(0)" },
+      { transform: `translateY(${window.innerHeight + 50}px) rotate(${Math.random()*720}deg)` }
+    ], { duration: d * 1000, easing: "ease-out" });
+
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), d * 1000);
   }
 }
+
+/* ===== SCATTERED BACKGROUND IMAGES (NO OVERLAP) ===== */
+const bgImages = document.getElementById("bgImages");
+const sources = [
+  "https://picsum.photos/300/400?1",
+  "https://picsum.photos/300/400?2",
+  "https://picsum.photos/300/400?3",
+  "https://picsum.photos/300/400?4",
+  "https://picsum.photos/300/400?5",
+  "https://picsum.photos/300/400?6"
+];
+
+// safe scatter zones (not vertical lines)
+const zones = [
+  { top: 8,  left: 6 },
+  { top: 28, left: 12 },
+  { top: 55, left: 5 },
+  { top: 15, right: 8 },
+  { top: 42, right: 14 },
+  { top: 68, right: 6 }
+];
+
+zones.forEach(zone => {
+  const div = document.createElement("div");
+  div.className = `bg-img ${Math.random() > 0.5 ? "bg-large" : "bg-medium"}`;
+
+  div.style.top = zone.top + (Math.random() * 6 - 3) + "%";
+  if (zone.left !== undefined)
+    div.style.left = zone.left + Math.random() * 18 + "px";
+  else
+    div.style.right = zone.right + Math.random() * 18 + "px";
+
+  div.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
+  div.style.animationDelay = Math.random() * 2 + "s";
+
+  const img = document.createElement("img");
+  img.src = sources[Math.floor(Math.random() * sources.length)];
+
+  div.appendChild(img);
+  bgImages.appendChild(div);
+});
 </script>
 
 </body>
 </html>
-
